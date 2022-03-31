@@ -17,8 +17,6 @@ const Filter = () => {
                 min="10"
                 max="1000"
                 value="500"
-                name=""
-                id=""
               />
             </div>
             <h2 class="padding-5">Brands</h2>

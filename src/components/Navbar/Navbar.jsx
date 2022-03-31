@@ -24,8 +24,6 @@ const Navbar = () => {
           <input
             className="padding-5 search"
             type="text"
-            name=""
-            id=""
             placeholder="Search"
           />
         </div>
