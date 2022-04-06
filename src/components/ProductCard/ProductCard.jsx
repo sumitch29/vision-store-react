@@ -1,22 +1,27 @@
 import '../ProductCard/ProductCard.css';
-import { useEffect,useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { useProduct } from "../../context/ProductContext";
+import { apiCall } from "../../utilities/product-list-api";
+import {
+	priceRange,
+	ratingProducts,
+	sortCategory,
+	sortProducts,
+} from "../../utilities/filter";
 
 const ProductCard =()=>{
-  const[data,setData]=useState([]);
-  useEffect(() => {
-  
-    const getProducts = async () => {
-      try {
-        const response = await axios.get("api/products");
-       
-        setData(response.data.products);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getProducts();
-  }, []);
+  const { productState, productDispatch } = useProduct();
+	const { productsList, rating, sortBy, price, categories } = productState;
+
+	useEffect(() => {
+		apiCall(productDispatch);
+	}, []);
+
+	const categoryProducts = sortCategory(productsList, categories);
+	const rangedProducts = priceRange(categoryProducts, price);
+	const ratedProducts = ratingProducts(rangedProducts, rating);
+	const sortedProducts = sortProducts(ratedProducts, sortBy);
+
   return (
     <div>
        <div className="container">
@@ -25,16 +30,16 @@ const ProductCard =()=>{
           </div>
           
          <div className='card-container'>
-             {data &&
-             data.map((product) => (
+         {sortedProducts.map(({img,author,title,rating,price}) => (
                  
           <div className="vertical-ecomm">
-          <img className="img-vertical" src={product.img} alt="iphone 13 pro max" />
+          <img className="img-vertical" src={img} alt="iphone 13 pro max" />
           <p className="brand-name">
-            {product.author}<i className="far fa-heart rightheart"></i>
+            {author}<i className="far fa-heart rightheart"></i>
           </p>
-          <p className="brand-info">{product.title}</p>
-          <p className="price brand-info">{product.price}</p>
+          <p className="brand-info">{title}</p>
+          <p className='font-s'>Rating: {rating} ⭐</p>
+          <p className="price brand-info">{price}</p>
           <button className="btn secondary solid-btn secondary-hover">
             <i className="fas fa-shopping-cart cart-center"></i> Add to Cart
           </button>
