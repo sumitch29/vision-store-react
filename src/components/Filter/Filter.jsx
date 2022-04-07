@@ -26,9 +26,9 @@ const Filter = () => {
             <div class="input-range center">
               <input
                 type="range"
-                min={8999}
+                min={0}
                 max={200000}
-                step={1000}
+                step={500}
                 value={price}
                 className="slider"
                 onChange={(e) =>
